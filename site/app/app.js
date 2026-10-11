@@ -238,13 +238,16 @@ function mimeOf(name) {
 }
 
 /**
- * The name a restored file is saved under. It never goes without an extension: macOS
- * Safari saves extensionless downloads as ".dms" (a known bug of its own), so a name
- * without one gets ".bin" instead.
+ * The name a restored file is saved under: the name stored on the pages, exactly. The one
+ * exception is a name without an extension in a WebKit browser: Safari saves such a download
+ * as ".dms" (a known bug of its own), so it gets ".bin" there.
  */
 function downloadFileName(name) {
   const base = (name || "").split(/[\\/]/).pop() || "restored-file";
-  return /\.[A-Za-z0-9]{1,10}$/.test(base) ? base : `${base}.bin`;
+  if (/\.[A-Za-z0-9]{1,10}$/.test(base)) return base;
+  const agent = navigator.userAgent;
+  const webkit = /AppleWebKit/.test(agent) && !/(Chrome|Chromium|Edg|OPR|CriOS|FxiOS|Android)/.test(agent);
+  return webkit ? `${base}.bin` : base;
 }
 
 function addFileChip(name, text, sourceId) {

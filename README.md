@@ -18,10 +18,11 @@ blocked until the work is done.
   decoder reads them in any order, restores the file for download and shows the per-page
   quality overlay (green/yellow/orange/red), even when the file cannot be restored. Each
   chosen file can be removed again from the list with the × on its chip.
-- **Names and types**: restored files keep their extension even when the format's 31-byte
-  name limit has to shorten the name, and a name without an extension is saved as `.bin`
-  (macOS Safari saves extensionless downloads as `.dms`, a bug of its own). The download
-  carries the MIME type of common kinds (PNG, JPEG, PDF, text, …).
+- **Names and types**: restored files are saved under the name stored on the pages, exactly
+  (the format keeps 31 bytes, and a longer name is shortened so its extension survives).
+  Only WebKit browsers get `.bin` appended to a name that has no extension at all — macOS
+  Safari saves those as `.dms` otherwise (a bug of its own). The download carries the MIME
+  type of common kinds (PNG, JPEG, PDF, text, …).
 - **Encode**: drop any file and get printable pages back — a PDF (black and white, made for
   printing) plus one PNG per page. The default is the **modern preset** of the CLI
   (`--modern`: parity blocks, filled pages, file records with the SHA-256); `balanced` and
