@@ -1,0 +1,291 @@
+Hello, and welcome to paperback.rs!
+
+You are reading the demonstration file that the sample pages on the homepage
+restore. If your decoder produced exactly these bytes, everything worked: the
+scanner-side reader, the error correction and the recovery blocks all did their
+job. The name stored on the pages is paperback-demo.txt, and the modification
+time is fixed so that every run of the sample generator produces the very same
+pages.
+
+What is paperback.rs?
+
+paperback.rs is a command-line program that stores files on paper. It is a Rust
+port of PaperBack 1.10, the classic data-backup program by Oleh Yuschuk. You give
+it a file, it renders that file as dense grids of black and white dots on ordinary
+sheets, and you print those sheets. Later, you photograph or scan the sheets and
+the program reads the file back. Paper is cheap, stable and readable without any
+special hardware, so a box of printed pages makes a surprisingly durable archive.
+
+The pages carry more than the raw payload. Each block of data has a checksum, and
+the pages carry recovery blocks as well, so a smudge, a staple or a torn corner
+does not have to be fatal. The reader tries several ways of sampling a block and
+can rebuild a limited number of lost blocks from the recovery data. It also
+prints a quality overlay that shows block by block how well a scan was read.
+
+Formats and compatibility
+
+The encoder writes PNG, BMP and PDF pages; BMP is the one format the original
+PaperBack opens directly. The decoder reads PNG, JPEG and BMP images as well as
+PDF documents, in any order, and it accepts scans and photographs, not just clean
+renders. Pages written by this program are meant to be read by the original
+program, and pages written by the original program are read back here: the two
+are interoperable in both directions.
+
+How to test the web decoder
+
+The homepage runs the actual Rust library as WebAssembly in your browser. Nothing
+is uploaded: your images stay on your machine. To try it, scroll to the decoder
+section and do one of two things.
+
+First, the two sample buttons load a page that is already part of the site. The
+clean sample, sample-page.png, decodes to a file that you can download as
+paperback-demo.txt. Its quality overlay should be green nearly everywhere. The
+damaged sample, sample-damaged.png, has small squares wiped out of the dot field;
+its overlay shows those squares in red and orange, yet the file still restores
+because the recovery blocks fill the holes back in.
+
+Second, you can drop your own page images or a PDF straight onto the drop zone.
+The browser decodes whatever image format it understands, or the library reads
+the bytes itself when the browser cannot. You can select several pages of one
+backup at once, in any order; the decoder assembles them into a single file.
+
+Reading the overlay
+
+Green means a block was read cleanly. Yellow and orange mean the reader needed
+more correction before it trusted the block. Red marks a block it could not read
+at all, or one that had to be rebuilt from the recovery data. The overlay is shown
+even when the whole file cannot be restored, because that is exactly when you want
+to see which page went wrong.
+
+Practical notes for scanning
+
+Scan at 300 dots per inch or better, in grayscale, with no sharpening and no
+automatic rotation. Keep the whole sheet inside the frame, including the hint text
+along the bottom edge, and keep the page flat. If a page reads badly, rescanning it
+at a higher resolution usually fixes more than any amount of post-processing. You
+do not have to name the files in any particular way and you do not have to feed the
+pages back in order.
+
+Licences and credits
+
+paperback.rs is free software under the GNU General Public License, version 3 or
+later. It is not affiliated with the original PaperBack, but it honours the format
+that program defined, and it thanks Oleh Yuschuk for designing it. The rest of this
+file is padded with a few numbered sections so that the encoded page fills a
+realistic amount of its grid.
+
+Practice section 1. The sample page you just decoded stores this whole
+file as a grid of dots, and this section exists only so that the grid is densely
+populated. When you inspect the quality overlay, remember that a green block came
+back on the first reading, while a yellow or orange block needed the error
+correction to work harder. A red block is one that the reader gave up on and that
+the recovery data had to rebuild. The number of blocks rebuilt from recovery data
+is reported after every decode, and on the clean sample it must stay at zero.
+Section 0001 reference: 75432777-CD305E6A.
+
+Practice section 2. The sample page you just decoded stores this whole
+file as a grid of dots, and this section exists only so that the grid is densely
+populated. When you inspect the quality overlay, remember that a green block came
+back on the first reading, while a yellow or orange block needed the error
+correction to work harder. A red block is one that the reader gave up on and that
+the recovery data had to rebuild. The number of blocks rebuilt from recovery data
+is reported after every decode, and on the clean sample it must stay at zero.
+Section 0002 reference: 25DBFAC1-4B5C952C.
+
+Practice section 3. The sample page you just decoded stores this whole
+file as a grid of dots, and this section exists only so that the grid is densely
+populated. When you inspect the quality overlay, remember that a green block came
+back on the first reading, while a yellow or orange block needed the error
+correction to work harder. A red block is one that the reader gave up on and that
+the recovery data had to rebuild. The number of blocks rebuilt from recovery data
+is reported after every decode, and on the clean sample it must stay at zero.
+Section 0003 reference: 84DE0E9B-E2AA733E.
+
+Practice section 4. The sample page you just decoded stores this whole
+file as a grid of dots, and this section exists only so that the grid is densely
+populated. When you inspect the quality overlay, remember that a green block came
+back on the first reading, while a yellow or orange block needed the error
+correction to work harder. A red block is one that the reader gave up on and that
+the recovery data had to rebuild. The number of blocks rebuilt from recovery data
+is reported after every decode, and on the clean sample it must stay at zero.
+Section 0004 reference: EA0F8185-F2D08520.
+
+Practice section 5. The sample page you just decoded stores this whole
+file as a grid of dots, and this section exists only so that the grid is densely
+populated. When you inspect the quality overlay, remember that a green block came
+back on the first reading, while a yellow or orange block needed the error
+correction to work harder. A red block is one that the reader gave up on and that
+the recovery data had to rebuild. The number of blocks rebuilt from recovery data
+is reported after every decode, and on the clean sample it must stay at zero.
+Section 0005 reference: A63075FF-81CF8B52.
+
+Practice section 6. The sample page you just decoded stores this whole
+file as a grid of dots, and this section exists only so that the grid is densely
+populated. When you inspect the quality overlay, remember that a green block came
+back on the first reading, while a yellow or orange block needed the error
+correction to work harder. A red block is one that the reader gave up on and that
+the recovery data had to rebuild. The number of blocks rebuilt from recovery data
+is reported after every decode, and on the clean sample it must stay at zero.
+Section 0006 reference: 207DB289-67549A54.
+
+Practice section 7. The sample page you just decoded stores this whole
+file as a grid of dots, and this section exists only so that the grid is densely
+populated. When you inspect the quality overlay, remember that a green block came
+back on the first reading, while a yellow or orange block needed the error
+correction to work harder. A red block is one that the reader gave up on and that
+the recovery data had to rebuild. The number of blocks rebuilt from recovery data
+is reported after every decode, and on the clean sample it must stay at zero.
+Section 0007 reference: 436C41A3-34003AA6.
+
+Practice section 8. The sample page you just decoded stores this whole
+file as a grid of dots, and this section exists only so that the grid is densely
+populated. When you inspect the quality overlay, remember that a green block came
+back on the first reading, while a yellow or orange block needed the error
+correction to work harder. A red block is one that the reader gave up on and that
+the recovery data had to rebuild. The number of blocks rebuilt from recovery data
+is reported after every decode, and on the clean sample it must stay at zero.
+Section 0008 reference: B20611CD-6EDA88C8.
+
+Practice section 9. The sample page you just decoded stores this whole
+file as a grid of dots, and this section exists only so that the grid is densely
+populated. When you inspect the quality overlay, remember that a green block came
+back on the first reading, while a yellow or orange block needed the error
+correction to work harder. A red block is one that the reader gave up on and that
+the recovery data had to rebuild. The number of blocks rebuilt from recovery data
+is reported after every decode, and on the clean sample it must stay at zero.
+Section 0009 reference: 4B8F9587-E27C553A.
+
+Practice section 10. The sample page you just decoded stores this whole
+file as a grid of dots, and this section exists only so that the grid is densely
+populated. When you inspect the quality overlay, remember that a green block came
+back on the first reading, while a yellow or orange block needed the error
+correction to work harder. A red block is one that the reader gave up on and that
+the recovery data had to rebuild. The number of blocks rebuilt from recovery data
+is reported after every decode, and on the clean sample it must stay at zero.
+Section 0010 reference: 995E6351-54B5447C.
+
+Practice section 11. The sample page you just decoded stores this whole
+file as a grid of dots, and this section exists only so that the grid is densely
+populated. When you inspect the quality overlay, remember that a green block came
+back on the first reading, while a yellow or orange block needed the error
+correction to work harder. A red block is one that the reader gave up on and that
+the recovery data had to rebuild. The number of blocks rebuilt from recovery data
+is reported after every decode, and on the clean sample it must stay at zero.
+Section 0011 reference: 7308D5AB-76B6EF0E.
+
+Practice section 12. The sample page you just decoded stores this whole
+file as a grid of dots, and this section exists only so that the grid is densely
+populated. When you inspect the quality overlay, remember that a green block came
+back on the first reading, while a yellow or orange block needed the error
+correction to work harder. A red block is one that the reader gave up on and that
+the recovery data had to rebuild. The number of blocks rebuilt from recovery data
+is reported after every decode, and on the clean sample it must stay at zero.
+Section 0012 reference: 7F56AB15-F10D0170.
+
+Practice section 13. The sample page you just decoded stores this whole
+file as a grid of dots, and this section exists only so that the grid is densely
+populated. When you inspect the quality overlay, remember that a green block came
+back on the first reading, while a yellow or orange block needed the error
+correction to work harder. A red block is one that the reader gave up on and that
+the recovery data had to rebuild. The number of blocks rebuilt from recovery data
+is reported after every decode, and on the clean sample it must stay at zero.
+Section 0013 reference: CC9AA60F-75EA5C22.
+
+Practice section 14. The sample page you just decoded stores this whole
+file as a grid of dots, and this section exists only so that the grid is densely
+populated. When you inspect the quality overlay, remember that a green block came
+back on the first reading, while a yellow or orange block needed the error
+correction to work harder. A red block is one that the reader gave up on and that
+the recovery data had to rebuild. The number of blocks rebuilt from recovery data
+is reported after every decode, and on the clean sample it must stay at zero.
+Section 0014 reference: 995D2D19-8D9333A4.
+
+Practice section 15. The sample page you just decoded stores this whole
+file as a grid of dots, and this section exists only so that the grid is densely
+populated. When you inspect the quality overlay, remember that a green block came
+back on the first reading, while a yellow or orange block needed the error
+correction to work harder. A red block is one that the reader gave up on and that
+the recovery data had to rebuild. The number of blocks rebuilt from recovery data
+is reported after every decode, and on the clean sample it must stay at zero.
+Section 0015 reference: 1E7FEAB3-ABEC3076.
+
+Practice section 16. The sample page you just decoded stores this whole
+file as a grid of dots, and this section exists only so that the grid is densely
+populated. When you inspect the quality overlay, remember that a green block came
+back on the first reading, while a yellow or orange block needed the error
+correction to work harder. A red block is one that the reader gave up on and that
+the recovery data had to rebuild. The number of blocks rebuilt from recovery data
+is reported after every decode, and on the clean sample it must stay at zero.
+Section 0016 reference: CE426D5D-DB768F18.
+
+Practice section 17. The sample page you just decoded stores this whole
+file as a grid of dots, and this section exists only so that the grid is densely
+populated. When you inspect the quality overlay, remember that a green block came
+back on the first reading, while a yellow or orange block needed the error
+correction to work harder. A red block is one that the reader gave up on and that
+the recovery data had to rebuild. The number of blocks rebuilt from recovery data
+is reported after every decode, and on the clean sample it must stay at zero.
+Section 0017 reference: 97CFC797-3941400A.
+
+Practice section 18. The sample page you just decoded stores this whole
+file as a grid of dots, and this section exists only so that the grid is densely
+populated. When you inspect the quality overlay, remember that a green block came
+back on the first reading, while a yellow or orange block needed the error
+correction to work harder. A red block is one that the reader gave up on and that
+the recovery data had to rebuild. The number of blocks rebuilt from recovery data
+is reported after every decode, and on the clean sample it must stay at zero.
+Section 0018 reference: 653D2FE1-6E9707CC.
+
+Practice section 19. The sample page you just decoded stores this whole
+file as a grid of dots, and this section exists only so that the grid is densely
+populated. When you inspect the quality overlay, remember that a green block came
+back on the first reading, while a yellow or orange block needed the error
+correction to work harder. A red block is one that the reader gave up on and that
+the recovery data had to rebuild. The number of blocks rebuilt from recovery data
+is reported after every decode, and on the clean sample it must stay at zero.
+Section 0019 reference: CA21A0BB-98719EDE.
+
+Practice section 20. The sample page you just decoded stores this whole
+file as a grid of dots, and this section exists only so that the grid is densely
+populated. When you inspect the quality overlay, remember that a green block came
+back on the first reading, while a yellow or orange block needed the error
+correction to work harder. A red block is one that the reader gave up on and that
+the recovery data had to rebuild. The number of blocks rebuilt from recovery data
+is reported after every decode, and on the clean sample it must stay at zero.
+Section 0020 reference: C32E78A5-71F9D1C0.
+
+Practice section 21. The sample page you just decoded stores this whole
+file as a grid of dots, and this section exists only so that the grid is densely
+populated. When you inspect the quality overlay, remember that a green block came
+back on the first reading, while a yellow or orange block needed the error
+correction to work harder. A red block is one that the reader gave up on and that
+the recovery data had to rebuild. The number of blocks rebuilt from recovery data
+is reported after every decode, and on the clean sample it must stay at zero.
+Section 0021 reference: 0B711A1F-6E9CA0F2.
+
+Practice section 22. The sample page you just decoded stores this whole
+file as a grid of dots, and this section exists only so that the grid is densely
+populated. When you inspect the quality overlay, remember that a green block came
+back on the first reading, while a yellow or orange block needed the error
+correction to work harder. A red block is one that the reader gave up on and that
+the recovery data had to rebuild. The number of blocks rebuilt from recovery data
+is reported after every decode, and on the clean sample it must stay at zero.
+Section 0022 reference: FA258BA9-897D60F4.
+
+Practice section 23. The sample page you just decoded stores this whole
+file as a grid of dots, and this section exists only so that the grid is densely
+populated. When you inspect the quality overlay, remember that a green block came
+back on the first reading, while a yellow or orange block needed the error
+correction to work harder. A red block is one that the reader gave up on and that
+the recovery data had to rebuild. The number of blocks rebuilt from recovery data
+is reported after every decode, and on the clean sample it must stay at zero.
+Section 0023 reference: A44217C3-3B4CDA46.
+
+Practice section 24. The sample page you just decoded stores this whole
+file as a grid of dots, and this section exists only so that the grid is densely
+populated. When you inspect the quality overlay, remember that a green block came
+back on the first reading, while a yellow or orange block needed the error
+correction to work harder. A red block is one that the reader gave up on and that
+the recovery data had to rebuild. The number of blocks rebuilt from recovery data
+is reported after every decode, and on the clean sample it must stay at zero.
+Section 0024 reference: 2F23ECED-14CD6968.
