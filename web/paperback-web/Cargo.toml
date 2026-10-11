@@ -1,0 +1,19 @@
+[package]
+name = "paperback-web"
+version = "0.1.0"
+edition = "2024"
+license = "GPL-3.0-or-later"
+description = "WebAssembly build of the paperback-rs decoder for the paperback.j0s.at homepage"
+repository = "https://github.com/J0s3f/paperback.rs"
+publish = false
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+paperback-rs = "=1.3.0"
+wasm-bindgen = "=0.2.129"
+js-sys = "0.3"
+# Pulled in only to unify the getrandom feature so that the library compiles for
+# wasm32-unknown-unknown; see the getrandom README, section "WebAssembly support".
+getrandom = { version = "0.4.3", features = ["wasm_js"] }

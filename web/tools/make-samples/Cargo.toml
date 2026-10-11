@@ -1,0 +1,15 @@
+[package]
+name = "make-samples"
+version = "0.1.0"
+edition = "2024"
+publish = false
+license = "GPL-3.0-or-later"
+description = "Generates the committed demo samples for the paperback.rs homepage."
+
+# Its own workspace so this host tool stays out of the web/ Cargo workspace and
+# therefore gets its own target/ directory.
+[workspace]
+
+[dependencies]
+paperback-rs = "=1.3.0"
+image = { version = "0.25", features = ["jpeg"] }

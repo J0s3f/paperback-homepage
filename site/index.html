@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>paperback.rs — Back up files on paper</title>
+<meta name="description" content="paperback.rs turns any file into error-corrected dot pages you print on paper, and reads them back years later — including right here in your browser.">
+<meta property="og:title" content="paperback.rs — Back up files on paper">
+<meta property="og:description" content="Print files as error-corrected dot pages, scan them back years later. Try the in-browser decoder.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://paperback.j0s.at/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23ffffff'/%3E%3Cg fill='%231a7f37'%3E%3Ccircle cx='9' cy='9' r='3'/%3E%3Ccircle cx='16' cy='9' r='3'/%3E%3Ccircle cx='23' cy='9' r='3'/%3E%3Ccircle cx='9' cy='16' r='3'/%3E%3Ccircle cx='16' cy='16' r='3'/%3E%3Ccircle cx='23' cy='16' r='3'/%3E%3Ccircle cx='9' cy='23' r='3'/%3E%3Ccircle cx='16' cy='23' r='3'/%3E%3Ccircle cx='23' cy='23' r='3'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+<style>[hidden] { display: none !important; }</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <h1>paperback.rs</h1>
+    <p class="tagline">Back up files on paper.</p>
+    <p class="pitch">paperback.rs turns any file into one or more pages of tiny dots, protected by
+      error correction. You print the pages, and years later you scan or photograph them and get
+      the file back — even if parts of the paper are damaged.</p>
+    <nav class="buttons" aria-label="Project links">
+      <a class="btn" href="https://github.com/J0s3f/paperback.rs">GitHub</a>
+      <a class="btn" href="https://crates.io/crates/paperback-rs">crates.io</a>
+      <a class="btn primary" href="#decoder">Try it in the browser</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="what" aria-labelledby="what-h">
+    <h2 id="what-h">What it is</h2>
+    <p>paperback.rs is a command-line port, written in Rust, of
+      <strong>PaperBack 1.10</strong> by Oleh Yuschuk. It writes files as error-corrected dot
+      pages (<strong>PNG / BMP / PDF</strong>) and reads them back from
+      <strong>PNG, JPEG, BMP and PDF</strong> files — scans or photos, in any order. Pages written
+      by the original open here, and pages written here open in the original: the two programs are
+      interoperable in both directions. Licence: <strong>GPL-3.0-or-later</strong>.</p>
+  </section>
+
+  <section id="install" aria-labelledby="install-h">
+    <h2 id="install-h">Install</h2>
+    <pre><code>cargo install paperback-rs-cli</code></pre>
+    <p>Needs Rust 1.92 or newer. The installed binary is named <code>paperback-rs</code>.
+      The engine is also available as a library crate for your own programs:
+      <a href="https://crates.io/crates/paperback-rs">paperback-rs</a> on crates.io, and the
+      command-line tool at <a href="https://crates.io/crates/paperback-rs-cli">paperback-rs-cli</a>.</p>
+  </section>
+
+  <section id="usage" aria-labelledby="usage-h">
+    <h2 id="usage-h">Usage</h2>
+    <pre><code>paperback-rs encode report.tar -o page-%03d.png
+paperback-rs encode report.tar -o backup.pdf
+paperback-rs decode page-*.png -o report.tar
+paperback-rs decode backup.pdf &gt; report.tar
+paperback-rs decode -v --json scan1.jpg scan2.jpg -o report.tar</code></pre>
+  </section>
+
+  <section id="decoder" aria-labelledby="decoder-h">
+    <h2 id="decoder-h">Try it in the browser</h2>
+    <p>This decoder runs the actual paperback.rs library as WebAssembly, fully client-side.
+      Drop page images (scans or photos) or a PDF below and get the file back — plus a
+      quality overlay per page. <strong>Nothing is uploaded to a server; everything stays in
+      your browser.</strong></p>
+    <p id="decoder-status" aria-live="polite">Decoder loads on first use (2.5 MB, stays in your browser).</p>
+    <div id="drop-zone" role="button" tabindex="0" aria-label="Choose page images or a PDF to decode">
+      <input id="file-input" type="file" multiple accept="image/*,.pdf,application/pdf">
+      <p class="drop-hint">Drop page images or a PDF here — or click to choose files. Nothing leaves your browser.</p>
+    </div>
+    <div id="file-list" aria-live="polite"></div>
+    <div class="decoder-controls">
+      <label for="password">Password <span class="optional">(only for encrypted backups)</span></label>
+      <input id="password" type="password" autocomplete="off" placeholder="Optional">
+      <div class="decoder-buttons">
+        <button id="decode-button" type="button" disabled>Decode</button>
+        <button id="clear-button" type="button" disabled>Clear</button>
+      </div>
+    </div>
+    <div class="decoder-samples">
+      <span class="samples-label">No pages at hand? Try a sample:</span>
+      <button class="sample-button" type="button" data-sample="samples/sample-page.png">Sample page (clean)</button>
+      <button class="sample-button" type="button" data-sample="samples/sample-damaged.png">Sample page (damaged)</button>
+    </div>
+    <p id="decoder-error" role="alert" aria-live="assertive"></p>
+    <div id="decoder-result" hidden></div>
+    <ul class="legend" aria-label="Overlay colour legend">
+      <li class="legend-item"><span class="swatch" style="background:#24F224" aria-hidden="true"></span>green — read cleanly</li>
+      <li class="legend-item"><span class="swatch" style="background:#C9F224" aria-hidden="true"></span>yellow — light corrections</li>
+      <li class="legend-item"><span class="swatch" style="background:#F27A24" aria-hidden="true"></span>orange — heavy corrections</li>
+      <li class="legend-item"><span class="swatch" style="background:#F22424" aria-hidden="true"></span>red — unreadable</li>
+    </ul>
+  </section>
+
+  <section id="encode" aria-labelledby="encode-h">
+    <h2 id="encode-h">Encode a file to paper</h2>
+    <p>The library also runs the other way round: pick any file and it is turned into printable
+      dot pages right here in your browser, with the <strong>modern preset</strong> by default
+      (parity blocks instead of the original recovery blocks, filled pages, and the file records
+      with the SHA-256 of the file). Printer presets cover <strong>inkjet</strong> (the default),
+      <strong>laser</strong> and pages meant to be read from a <strong>camera photo</strong>, and
+      the resolution and dot size can be set by hand. The pages keep the gray levels the original
+      program writes, and the PDF is pure black and white because it is made for printing.
+      <strong>Nothing is uploaded; the file never leaves your browser.</strong></p>
+    <p id="encode-status" aria-live="polite">Pick a file to encode — it never leaves your browser.</p>
+    <div id="encode-drop-zone" role="button" tabindex="0" aria-label="Choose a file to encode">
+      <input id="encode-file-input" type="file">
+      <p class="drop-hint">Drop a file here — or click to choose one.</p>
+    </div>
+    <div id="encode-file-list" aria-live="polite"></div>
+    <div class="encoder-controls">
+      <div class="encoder-field">
+        <label for="encode-printer">Printer</label>
+        <select id="encode-printer">
+          <option value="inkjet" selected>Inkjet (default)</option>
+          <option value="laser">Laser</option>
+          <option value="camera">Camera-readable</option>
+          <option value="custom">Custom</option>
+        </select>
+      </div>
+      <div class="encoder-field">
+        <label for="encode-printer-dpi">Printer resolution (dpi)</label>
+        <input id="encode-printer-dpi" type="number" min="150" max="2400" step="1" value="600">
+      </div>
+      <div class="encoder-field">
+        <label for="encode-dot-dpi">Dot density (dpi)</label>
+        <input id="encode-dot-dpi" type="number" min="50" max="600" step="1" value="200">
+      </div>
+      <div class="encoder-field">
+        <label for="encode-dot-percent">Dot size (% of pitch)</label>
+        <input id="encode-dot-percent" type="number" min="20" max="100" step="1" value="80">
+      </div>
+      <div class="encoder-field">
+        <label for="encode-preset">Error correction</label>
+        <select id="encode-preset">
+          <option value="modern" selected>Modern (default) — parity, filled pages, records</option>
+          <option value="balanced">Balanced — PaperBack recovery blocks and parity</option>
+          <option value="legacy">Legacy — exactly PaperBack 1.10</option>
+        </select>
+      </div>
+      <div class="encoder-field" id="encode-redundancy-field">
+        <label for="encode-redundancy">Redundancy <span class="optional">(recovery blocks)</span></label>
+        <input id="encode-redundancy" type="range" min="0" max="9" step="1" value="1">
+        <span id="encode-redundancy-value" class="field-value">one recovery block per 10 data blocks (10 %)</span>
+      </div>
+      <div class="encoder-field" id="encode-parity-field">
+        <label for="encode-parity">Parity <span class="optional">(blocks per 100 data)</span></label>
+        <input id="encode-parity" type="range" min="0" max="100" step="1" value="10">
+        <span id="encode-parity-value" class="field-value">10 %</span>
+      </div>
+      <div class="encoder-field">
+        <label for="encode-paper">Paper</label>
+        <select id="encode-paper">
+          <option value="a4" selected>A4</option>
+          <option value="letter">Letter</option>
+        </select>
+      </div>
+      <div class="encoder-field">
+        <label for="encode-compression">Compression</label>
+        <select id="encode-compression">
+          <option value="max" selected>Maximal (bzip2)</option>
+          <option value="fast">Fast (bzip2)</option>
+          <option value="none">None</option>
+        </select>
+      </div>
+      <div class="encoder-field">
+        <label for="encode-password">Password <span class="optional">(optional, not audited)</span></label>
+        <input id="encode-password" type="password" autocomplete="off" placeholder="Optional">
+      </div>
+    </div>
+    <p class="encoder-note">Pages are laid out with print-safe margins of 12.7 mm (0.5 in) on
+      every side, inside the unprintable edge of ordinary printers. Printer presets:
+      inkjet 300/150 dpi, dots 80 % · laser 600/300 dpi, dots 70 % · camera 150/75 dpi,
+      dots 80 % (printer resolution / dot density). The camera preset is for photographs:
+      the coarse grid (0.34 mm) works with any 12 MP phone when the sheet fills the frame,
+      in even light and with the page flat; the inkjet preset wants a scan at about 600 dpi.</p>
+    <div class="decoder-buttons">
+      <button id="encode-button" type="button" disabled>Encode</button>
+      <button id="encode-clear-button" type="button" disabled>Clear</button>
+    </div>
+    <p id="encode-error" role="alert" aria-live="assertive"></p>
+    <div id="encode-result" hidden></div>
+  </section>
+
+  <section id="checking" aria-labelledby="checking-h">
+    <h2 id="checking-h">Checking a scan</h2>
+    <p>Every decoded page comes with a quality overlay: the scan with block colours laid over it.
+      <strong>Green</strong> blocks read cleanly; blocks that needed more and more error correction
+      shade through <strong>yellow</strong> to <strong>orange</strong>; <strong>red</strong> blocks
+      could not be read. The overlay lays the colours over the scan so you can see where the damage
+      is — a dirty spot, a fold, a bad scanner edge. It is shown even when the file cannot be
+      restored, which is when it is most useful: it tells you what to rescan.</p>
+  </section>
+
+  <section id="compatibility" aria-labelledby="compat-h">
+    <h2 id="compat-h">Compatibility &amp; status</h2>
+    <table>
+      <thead>
+        <tr><th scope="col">Direction</th><th scope="col">PaperBack 1.10</th><th scope="col">PaperBack 1.00</th></tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row">original writes, paperback.rs reads</th><td>yes, plain and encrypted</td><td>yes, plain and encrypted (read only)</td></tr>
+        <tr><th scope="row">paperback.rs writes, original reads</th><td>yes, plain and encrypted</td><td>plain only</td></tr>
+      </tbody>
+    </table>
+    <p>Working: everything above. Not yet: PDFs with mixed one- and two-dimensional fax coding,
+      vector-only PDF pages (there must be an image to read). See the
+      <a href="https://github.com/J0s3f/paperback.rs">repository documentation</a> for details.</p>
+  </section>
+
+  <section id="encryption" aria-labelledby="enc-h">
+    <h2 id="enc-h">Encryption</h2>
+    <p>The built-in password encryption exists mainly for backward compatibility with the original
+      PaperBack, so old encrypted pages stay readable — <strong>the cryptographic code is not
+      audited</strong>, so do not treat it as a vault. Prefer encrypting with a secure tool
+      (such as <code>age</code> or <code>gpg</code>) in a pipe first, and use paperback.rs only
+      to put the encrypted bytes on paper:</p>
+    <pre><code>tar -c documents | age -r age1... | paperback-rs encode - -o backup.pdf</code></pre>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <nav aria-label="Footer links">
+      <a href="https://github.com/J0s3f/paperback.rs">GitHub</a> ·
+      <a href="https://crates.io/crates/paperback-rs">paperback-rs</a> ·
+      <a href="https://crates.io/crates/paperback-rs-cli">paperback-rs-cli</a> ·
+      <a href="https://ollydbg.de/Paperbak/">original PaperBack</a>
+    </nav>
+    <p>Licence: GPL-3.0-or-later. paperback.rs is a community port and is
+      <strong>not affiliated with the original PaperBack</strong>.</p>
+  </div>
+</footer>
+
+<div id="busy" hidden>
+  <div class="busy-card" role="status" aria-live="polite">
+    <div class="busy-spinner" aria-hidden="true"></div>
+    <p id="busy-text">Working…</p>
+    <div id="busy-bar" class="busy-bar" hidden><div id="busy-fill" class="busy-fill"></div></div>
+  </div>
+</div>
+
+<script type="module" src="app/app.js"></script>
+</body>
+</html>
