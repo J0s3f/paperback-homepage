@@ -659,9 +659,9 @@ checksum = "9f7c3e4beb33f85d45ae3e3a1792185706c8e16d043238c593331cc7cd313b50"
 
 [[package]]
 name = "paperback-rs"
-version = "1.3.0"
+version = "1.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7d00a33f53256154d05dbc9ebef320fa47206ddb1f485c89846f980755336202"
+checksum = "2b1681e0acfd98c0a9d8c642ded8c7428de294cca0fc27fc69af4efff86e3e1d"
 dependencies = [
  "aes 0.9.3",
  "bzip2",

@@ -7,7 +7,7 @@ WebAssembly module is only fetched when the visitor first uses either tool.
 
 ## The web app (`site/`)
 
-The decoder and the encoder both run the actual `paperback-rs` 1.3.0 library as WebAssembly.
+The decoder and the encoder both run the actual `paperback-rs` 1.3.1 library as WebAssembly.
 The module (~2.5 MB) is **not loaded at page load**: the first interaction with either tool
 starts a **Web Worker** (`app/worker.js`) that loads the module, so the page itself stays tiny
 and stays responsive. While the worker decodes or encodes, the page shows a progress indicator

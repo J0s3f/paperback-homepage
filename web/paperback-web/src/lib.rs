@@ -24,7 +24,7 @@ use paperback_rs::raster::{self, Raster};
 use wasm_bindgen::prelude::*;
 
 /// The version of the pinned `paperback-rs` library.
-const PAPERBACK_RS_VERSION: &str = "1.3.0";
+const PAPERBACK_RS_VERSION: &str = "1.3.1";
 
 /// Margin used on every side of an encoded page when the settings do not say otherwise:
 /// 0.5 in (12.7 mm), inside the unprintable edge of ordinary laser and inkjet printers.
